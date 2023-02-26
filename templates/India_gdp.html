@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "https://www.w3.org/TR/html4/strict.dtd">
+
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>GDP of India</title>
+		
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
+		<script type="text/javascript"></script>
+		<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/data.js"></script>
+		<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+	
+		<link href="/static/css/style.css" rel="stylesheet" />
+		
+		<script type="text/javascript">
+			
+			var chart;
+			$(document).ready(function() {
+				chart = new Highcharts.chart('container', {
+					chart: {
+						type: 'line',
+						zoomType: 'x'
+					},
+					title: {
+						text: 'India: Gross domestic product (GDP) in current prices from 1987 to 2027',
+						align: 'left'
+					},
+					credits: {
+						enabled: false
+					},
+					subtitle: {
+						text: document.ontouchstart === undefined ?
+							'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in',
+						align: 'left'
+					},
+					xAxis: {
+						type: 'year'
+					},
+					yAxis: {
+						title: {
+							text: 'GDP in billion {{currency}}'
+						}
+					},
+					legend: {
+						enabled: false
+					},
+					plotOptions: {
+						area: {
+							fillColor: {
+								linearGradient: {
+									x1: 0,
+									y1: 0,
+									x2: 0,
+									y2: 1
+								},
+								stops: [
+									[0, Highcharts.getOptions().colors[4]],
+									[1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+								]
+							},
+							marker: {
+								radius: 2
+							},
+							lineWidth: 1,
+							states: {
+								hover: {
+									lineWidth: 1
+								}
+							},
+							threshold: null
+						}
+					},
+		
+					series: [{
+						type: 'area',
+						name: 'GDP',
+						data: {{data}}
+					}]
+				});
+				
+			});
+		</script>
+		
+	</head>
+	<body>
+		
+		<div id="wrapper" style="width: 800px; margin: 0 auto;  ">
+			<div id="container" style="height: 400px; width: 800px; margin-bottom: 1em;"></div>
+			{% if currency_type != 'INR' %}
+				<form class='button' action='/India_gdp?currency=INR' method='POST'>
+					<input type="submit" value="Convert to Indian Rs." />
+				</form>
+			{% else %}
+				<form class='button' action='/India_gdp' method='POST'>
+					<input type="submit" value="Convert to U.S. Dollars" />
+				</form>
+			{% endif %}
+
+		</div>
+
+		
+		
+	</body>
+</html>
