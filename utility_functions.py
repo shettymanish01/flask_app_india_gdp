@@ -1,8 +1,8 @@
-import sqlite3 as sql
 import requests
 import json
 import socket
 from dotenv import dotenv_values
+from .database import Database
 
 
 secrets = dotenv_values(".env")
@@ -24,13 +24,10 @@ def get_currency_value(currency):
         
     
 def get_gdp_data(currency):
-    con = sql.connect("gdp_database.db")
-    con.row_factory = sql.Row
-   
-    cur = con.cursor()
-    cur.execute("select * from gdp_in_dollars")
-   
-    gdp_data = cur.fetchall()
-    con.close()
+    query = "select * from gdp_in_dollars"
+    with Database('gdp_database.db') as db:
+        gdp_data = db.query(query)
+    
+    
     currency_value = get_currency_value(currency)
     return([[item['year'],item['gdp']*float(currency_value)] for item in gdp_data])
